@@ -1,4 +1,5 @@
 let displayEl = document.getElementById("display-el");
+let auxilioEl = document.getElementById("auxilio-el");
 let btnCE = document.getElementById("btnCE-el")
 let btnC = document.getElementById("btnC-el")
 let btnIdk = document.getElementById("btnIdk-el")
@@ -11,12 +12,13 @@ let btnComma = document.getElementById("btnComma-el")
 let btnMoreOrLess = document.getElementById("btnMoreOrLess-el")
 let grupos = "";
 let numOperacao = 0;
+let termoOperacao = 0;
 let array = [];
 let sum, sub, multiply, divide = false
 
 document.querySelectorAll("#btn-el").forEach( function(button) {
     
-    button.addEventListener("click", function(event) {
+  button.addEventListener("click", function(event) {
 
     const el = event.target;
     let id = el.textContent;
@@ -24,7 +26,8 @@ document.querySelectorAll("#btn-el").forEach( function(button) {
     array.push(id)
     for(let i = 0; i<array.length;i++) grupos +=id   
     displayEl.textContent = grupos;
-    
+    // caso grupos não seja vazio, atribuir diretamente para o termoOperacao
+    exibeAuxilio()
     limpaArray()
   });
 });
@@ -78,7 +81,7 @@ btnMultiply.addEventListener("click", function() {
 });
 
 btnEquals.addEventListener("click", function(){
-  let termoOperacao = stringParaInt(grupos)
+  termoOperacao = stringParaInt(grupos)
   
   if(sum === true && (sub === false, divide === false, multiply === false)){
     
@@ -96,7 +99,7 @@ btnEquals.addEventListener("click", function(){
       grupos = ""
     }
     else{
-      
+
       numOperacao /= termoOperacao 
     }
   }
@@ -105,8 +108,17 @@ btnEquals.addEventListener("click", function(){
 
     numOperacao *= termoOperacao
   }
-  if(displayEl.textContent != "Invalido")
+  if(displayEl.textContent != "Invalido"){
+    
     displayEl.textContent = `${numOperacao}`
+    grupos = ""
+  }  
+})
+btnMoreOrLess.addEventListener("click", function(){
+
+  grupos = -1 * stringParaInt(grupos);
+  displayEl.textContent = `${grupos}`
+
 })
 
 btnCE.addEventListener("click", function(){  
@@ -118,6 +130,7 @@ btnCE.addEventListener("click", function(){
 function limpaArray(){
   for(let i = 0; i<array.length; i++) array.pop(array[i]);
 }
+
 function limpaDisplayEGrupo(){
   displayEl.textContent = "";
   grupos = "";
@@ -125,4 +138,11 @@ function limpaDisplayEGrupo(){
 
 function stringParaInt(grupos){
   return parseInt(grupos);
+}
+
+function exibeAuxilio(){
+
+  auxilioEl.textContent = `${grupos}` 
+  auxilioEl.textContent = `${numOperacao} + ${grupos}`
+
 }
